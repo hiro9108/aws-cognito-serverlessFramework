@@ -8,50 +8,80 @@ provider:
   stage: dev
   region: ca-central-1
 
+functions:
+  index:
+    handler: api/handler.hello
+    # events:
+    #   - http: GET hello
+    events:
+      - http:
+          path: /hello
+          method: GET
+          # integration: lambda
+          authorizer:
+            type: COGNITO_USER_POOLS
+            authorizerId: !Ref ApiGatewayAuthorizer
+
+  second:
+    handler: api/secondHandler.second
+    events:
+      - http: GET second
+
+  email:
+    handler: api/email/emailHandler.email
+    events:
+      - http: GET email
+  # second:
+  #   handler: second.sendMail
+  #   events:
+  #     - http: GET sendMail
+
 resources:
-  Resources:
-    UserPool:
-      Type: AWS::Cognito::UserPool
-      Properties:
-        UserPoolName: ${self:provider.stage}-user-pool
-        UsernameAttributes:
-          - email
-        AutoVerifiedAttributes:
-          - email
+  - ${file(./resources/cognito.yml)}
+  - ${file(./resources/apigateway-authorizer.yml)}
+  # Resources:
+  #   UserPool:
+  #     Type: AWS::Cognito::UserPool
+  #     Properties:
+  #       UserPoolName: ${self:provider.stage}-user-pool
+  #       UsernameAttributes:
+  #         - email
+  #       AutoVerifiedAttributes:
+  #         - email
 
-    UserPoolClient:
-      Type: AWS::Cognito::UserPoolClient
-      Properties:
-        ClientName: ${self:provider.stage}-user-pool-client
-        AllowedOAuthFlowsUserPoolClient: True
-        SupportedIdentityProviders:
-          - COGNITO
-        AllowedOAuthFlows:
-          - code
-        AllowedOAuthScopes:
-          - email
-          - openid
-          - profile
-        CallbackURLs:
-          - http://localhost:3000/api/auth/callback/cognito
-        # ExplicitAuthFlows:
-        #   - ALLOW_USER_SRP_AUTH
-        GenerateSecret: True
-        UserPoolId:
-          Ref: UserPool
+  #   UserPoolClient:
+  #     Type: AWS::Cognito::UserPoolClient
+  #     Properties:
+  #       ClientName: ${self:provider.stage}-user-pool-client
+  #       AllowedOAuthFlowsUserPoolClient: True
+  #       SupportedIdentityProviders:
+  #         - COGNITO
+  #       AllowedOAuthFlows:
+  #         - code
+  #       AllowedOAuthScopes:
+  #         - email
+  #         - openid
+  #         - profile
+  #       CallbackURLs:
+  #         - http://localhost:3000/api/auth/callback/cognito
+  #       # ExplicitAuthFlows:
+  #       #   - ALLOW_USER_SRP_AUTH
+  #       GenerateSecret: True
+  #       UserPoolId:
+  #         Ref: UserPool
 
-    UserPoolDomain:
-      Type: AWS::Cognito::UserPoolDomain
-      Properties:
-        # CustomDomainConfig: CustomDomainConfigType
-        Domain: nextauthdemo01
-        UserPoolId:
-          Ref: UserPool
+  #   UserPoolDomain:
+  #     Type: AWS::Cognito::UserPoolDomain
+  #     Properties:
+  #       # CustomDomainConfig: CustomDomainConfigType
+  #       Domain: nextauthdemo01
+  #       UserPoolId:
+  #         Ref: UserPool
 
-    # UserPoolIdentityProvider:
-    #   Type: AWS::Cognito::UserPoolIdentityProvider
-    #   Properties:
-    #     ProviderName: xxx
-    #     ProviderType: xxx
-    #     UserPoolId:
-    #       Ref: UserPool
+  # UserPoolIdentityProvider:
+  #   Type: AWS::Cognito::UserPoolIdentityProvider
+  #   Properties:
+  #     ProviderName: xxx
+  #     ProviderType: xxx
+  #     UserPoolId:
+  #       Ref: UserPool

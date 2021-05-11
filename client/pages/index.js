@@ -8,6 +8,7 @@ export default function Home() {
   const onClickHandler = () => {};
 
   if (session) {
+    console.log(session);
     return (
       <>
         Signed in as {session.user.email} <br />
