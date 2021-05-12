@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useSession, signIn, signOut } from "next-auth/client";
+import axios from "axios";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
@@ -7,12 +8,22 @@ export default function Home() {
 
   const onClickHandler = () => {};
 
+  const onClickGetDataHandler = async () => {
+    const { data } = await axios.get("https://xxxxx", {
+      headers: {
+        Authorization: `token`,
+      },
+    });
+    console.log(data);
+  };
+
   if (session) {
-    console.log(session);
     return (
       <>
         Signed in as {session.user.email} <br />
         <button onClick={() => signOut()}>Sign out</button>
+        <br />
+        <button onClick={onClickGetDataHandler}>Get API Data</button>
       </>
     );
   }
