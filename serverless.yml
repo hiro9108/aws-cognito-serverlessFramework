@@ -1,11 +1,11 @@
 service: cognito-demo
 
-frameworkVersion: "2.41.1"
+frameworkVersion: "2"
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: dev
+  # stage: dev
   region: ca-central-1
 
 functions:

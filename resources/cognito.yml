@@ -2,7 +2,8 @@ Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      UserPoolName: ${self:provider.stage}-user-pool
+      # UserPoolName: ${self:provider.stage}-user-pool
+      UserPoolName: ${opt:stage}-user-pool
       UsernameAttributes:
         - email
       AutoVerifiedAttributes:
@@ -11,7 +12,8 @@ Resources:
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      ClientName: ${self:provider.stage}-user-pool-client
+      # ClientName: ${self:provider.stage}-user-pool-client
+      ClientName: ${opt:stage}-user-pool-client
       AllowedOAuthFlowsUserPoolClient: True
       SupportedIdentityProviders:
         - COGNITO
@@ -38,7 +40,7 @@ Resources:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
       # CustomDomainConfig: CustomDomainConfigType
-      Domain: nextauthdemo01
+      Domain: ${opt:stage}-nextauthdemo01
       UserPoolId:
         Ref: UserPool
 
