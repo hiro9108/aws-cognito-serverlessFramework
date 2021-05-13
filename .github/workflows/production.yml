@@ -31,10 +31,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - run: npm ci
       - uses: serverless/github-action@master
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PRO }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PRO }}
           aws-region: ca-central-1
           args: deploy
+      - run: sls deploy -v
