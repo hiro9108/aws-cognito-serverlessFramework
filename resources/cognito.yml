@@ -17,12 +17,17 @@ Resources:
         - COGNITO
       AllowedOAuthFlows:
         - code
+        - implicit
       AllowedOAuthScopes:
         - email
         - openid
         - profile
+      # CallbackURLs:
+      #   - http://localhost:3000/api/auth/callback/cognito
       CallbackURLs:
-        - http://localhost:3000/api/auth/callback/cognito
+        - https://example.com/callback
+      LogoutURLs:
+        - https://example.com/signout
       # ExplicitAuthFlows:
       #   - ALLOW_USER_SRP_AUTH
       GenerateSecret: True
