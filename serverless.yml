@@ -1,6 +1,6 @@
 service: cognito-demo
 
-frameworkVersion: "2.35.0"
+frameworkVersion: "2.41.1"
 
 provider:
   name: aws
