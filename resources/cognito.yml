@@ -2,8 +2,7 @@ Resources:
   UserPool:
     Type: AWS::Cognito::UserPool
     Properties:
-      # UserPoolName: ${self:provider.stage}-user-pool
-      UserPoolName: ${opt:stage}-user-pool
+      UserPoolName: ${self:provider.stage}-user-pool
       UsernameAttributes:
         - email
       AutoVerifiedAttributes:
@@ -12,8 +11,7 @@ Resources:
   UserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Properties:
-      # ClientName: ${self:provider.stage}-user-pool-client
-      ClientName: ${opt:stage}-user-pool-client
+      ClientName: ${self:provider.stage}-user-pool-client
       AllowedOAuthFlowsUserPoolClient: True
       SupportedIdentityProviders:
         - COGNITO
@@ -24,12 +22,12 @@ Resources:
         - email
         - openid
         - profile
-      # CallbackURLs:
-      #   - http://localhost:3000/api/auth/callback/cognito
       CallbackURLs:
-        - https://example.com/callback
-      LogoutURLs:
-        - https://example.com/signout
+        - http://localhost:3000/api/auth/callback/cognito
+      # CallbackURLs:
+      #   - https://example.com/callback
+      # LogoutURLs:
+      #   - https://example.com/signout
       # ExplicitAuthFlows:
       #   - ALLOW_USER_SRP_AUTH
       GenerateSecret: True
@@ -39,15 +37,6 @@ Resources:
   UserPoolDomain:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
-      # CustomDomainConfig: CustomDomainConfigType
-      Domain: ${opt:stage}-nextauthdemo01
+      Domain: ${self:provider.stage}-nextauthdemonstration
       UserPoolId:
         Ref: UserPool
-
-  # UserPoolIdentityProvider:
-  #   Type: AWS::Cognito::UserPoolIdentityProvider
-  #   Properties:
-  #     ProviderName: xxx
-  #     ProviderType: xxx
-  #     UserPoolId:
-  #       Ref: UserPool

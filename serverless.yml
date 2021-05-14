@@ -2,22 +2,46 @@ service: cognito-demo
 
 frameworkVersion: "2"
 
+# custom:
+#   environment:
+#     dev: ${file(./environment/dev.yml)}
+#     prd: ${file(./environment/prd.yml)}
+
 provider:
   name: aws
   runtime: nodejs12.x
-  # stage: dev
+  stage: ${opt:stage, 'dev'}
   region: ca-central-1
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        Fn::GetAtt:
+          - usersTable
+          - Arn
+
+package:
+  patterns:
+    # - "!environment/**"
+    - "!node_modules/**"
+    - "!public/**"
+    - "!src/**"
+    - "!.next/**"
+    - "!.github/**"
 
 functions:
-  index:
-    handler: api/handler.hello
-    # events:
-    #   - http: GET hello
+  first:
+    handler: api/firsthandler.first
     events:
       - http:
           path: /hello
           method: GET
-          # integration: lambda
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId: !Ref ApiGatewayAuthorizer
@@ -31,11 +55,13 @@ functions:
     handler: api/email/emailHandler.email
     events:
       - http: GET email
-  # second:
-  #   handler: second.sendMail
-  #   events:
-  #     - http: GET sendMail
+
+  dynamodb:
+    handler: api/dynamodb.dynamodb
+    events:
+      - http: GET dynamodb
 
 resources:
   - ${file(./resources/cognito.yml)}
   - ${file(./resources/apigateway-authorizer.yml)}
+  - ${file(./resources/dynamodb.yml)}
