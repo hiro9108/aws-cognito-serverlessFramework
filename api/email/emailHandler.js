@@ -1,15 +1,26 @@
 "use strict";
 
-module.exports.email = function (event, context, callback) {
-  console.log(event); // Contains incoming request data (e.g., query params, headers and more)
-  console.log("email");
-  const response = {
-    statusCode: 200,
-    headers: {
-      "x-custom-header": "My Header Value",
+const AWS = require("aws-sdk");
+const ses = new AWS.SES({ region: process.env.AWS_SPECIFIC_REGION });
+
+exports.email = async function (event) {
+  const params = {
+    Destination: {
+      ToAddresses: [process.env.TO_ADDRESSES],
     },
-    body: JSON.stringify({ message: "Hello email Handler!" }),
+    Message: {
+      Body: {
+        Text: { Data: "Test SES" },
+      },
+
+      Subject: { Data: "Test Email" },
+    },
+    Source: process.env.FROM_ADDRESSES,
   };
 
-  callback(null, response);
+  return ses
+    .sendEmail(params)
+    .promise()
+    .then((data) => console.log(data.MessageId))
+    .catch((err) => console.log(err));
 };

@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "sls-deploy": "sls deploy -v --stage dev",
+    "sls-remove": "sls remove -v --stage dev"
   },
   "dependencies": {
     "axios": "^0.21.1",

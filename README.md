@@ -1,17 +1,55 @@
-# Create Serverless Template
+# How to use Serverlessframework
+
+> Install serverlessframework.
 
 ```sh
-serverless create --template aws-nodejs --name <service name> --path <service directory>
+npm install -g serverless
 ```
 
-> Execute lambda function in local.
+> Install aws cli
 
 ```sh
-sls invoke local --function hello --data demo --region <your region>
+brew install awscli
 ```
 
-> Remove aws resources
+> Set your aws credentials. (you can follow a instruction on terminal)
 
 ```sh
-sls remove -v
+aws configure
 ```
+
+> Check aws credentials.
+
+```sh
+cat ~/.aws/credentials
+```
+
+> Create the `.env.local` file.
+
+```sh
+cp .env.local.example .env.local
+```
+
+> Create the `serverless.yml` in your root directory and
+> deploy aws resources to development environment.
+
+```sh
+npm run sls-deploy
+```
+
+> Set environment variables. \*If you want to check SES(api/email), please attach IAM role for SES now.
+
+> deploy aws resources to development environment.
+
+```sh
+npm run sls-deploy
+```
+
+> Rmove aws resources from development environment.
+
+```sh
+npm run sls-remove
+```
+
+> Please follow `serverless.yml`, `resources/*`, `api/*`, `,github/*` files.
+> These files work for aws resources and CICD workflow. If you push or pull request to main branch, aws resoruces are created automatically.
