@@ -2,7 +2,7 @@ Resources:
   usersTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: users
+      TableName: ${self:provider.stage}-users
       AttributeDefinitions:
         - AttributeName: id
           AttributeType: S
