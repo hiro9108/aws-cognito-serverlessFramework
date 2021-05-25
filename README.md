@@ -33,10 +33,6 @@ cp .env.local.example .env.local
 > Create the `serverless.yml` in your root directory and
 > deploy aws resources to development environment.
 
-```sh
-npm run sls-deploy
-```
-
 > Set environment variables. \*If you want to check SES(api/email), please attach IAM role for SES now.
 
 > deploy aws resources to development environment.

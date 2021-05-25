@@ -37,11 +37,12 @@ package:
 
 functions:
   first:
-    handler: api/firsthandler.first
+    handler: api/firstHandler.first
     events:
       - http:
           path: /hello
           method: GET
+          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId: !Ref ApiGatewayAuthorizer
