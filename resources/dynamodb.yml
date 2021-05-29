@@ -1,18 +1,77 @@
 Resources:
-  usersTable:
+  dpCodeTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: users
+      TableName: ${self:provider.stage}-dpCode
       AttributeDefinitions:
-        - AttributeName: id
+        - AttributeName: PK
           AttributeType: S
-        - AttributeName: email
+        - AttributeName: SK
           AttributeType: S
       KeySchema:
-        - AttributeName: id
+        - AttributeName: PK
           KeyType: HASH
-        - AttributeName: email
+        - AttributeName: SK
           KeyType: RANGE
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+
+  # coursesTable:
+  #   Type: AWS::DynamoDB::Table
+  #   Properties:
+  #     TableName: ${self:provider.stage}-courses
+  #     AttributeDefinitions:
+  #       - AttributeName: course_id
+  #         AttributeType: S
+  #       - AttributeName: course
+  #         AttributeType: S
+  #     KeySchema:
+  #       - AttributeName: course_id
+  #         KeyType: HASH
+  #       - AttributeName: course
+  #         KeyType: RANGE
+  #     ProvisionedThroughput:
+  #       ReadCapacityUnits: 1
+  #       WriteCapacityUnits: 1
+
+  # studentCourseTable:
+  #   Type: AWS::DynamoDB::Table
+  #   Properties:
+  #     TableName: ${self:provider.stage}-student_course
+  #     AttributeDefinitions:
+  #       - AttributeName: course_id
+  #         AttributeType: S
+  #       - AttributeName: user_id
+  #         AttributeType: S
+  #     KeySchema:
+  #       - AttributeName: course_id
+  #         KeyType: HASH
+  #       - AttributeName: user_id
+  #         KeyType: RANGE
+  #     ProvisionedThroughput:
+  #       ReadCapacityUnits: 1
+  #       WriteCapacityUnits: 1
+
+  DynamoDBIamPolicy:
+    Type: AWS::IAM::Policy
+    DependsOn: dpCodeTable
+    Properties:
+      PolicyName: lambda-dynamodb
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - dynamodb:Query
+              - dynamodb:Scan
+              - dynamodb:GetItem
+              - dynamodb:PutItem
+              - dynamodb:UpdateItem
+              - dynamodb:DeleteItem
+            Resource:
+              - { Fn::GetAtt: [dpCodeTable, Arn] }
+              # - { Fn::GetAtt: [coursesTable, Arn] }
+              # - !GetAtt usersTable
+      Roles:
+        - Ref: IamRoleLambdaExecution
