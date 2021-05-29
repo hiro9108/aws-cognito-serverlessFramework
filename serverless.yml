@@ -2,14 +2,14 @@ service: cognito-demo
 
 frameworkVersion: "2"
 
-custom:
-  environment:
-    serverlessIfElse:
-    - If: '"${self:provider.stage}" == "dev"'
-        Exclude:
-          - plugins.serverless-offline
-    # dev: ${file(./environment/dev.yml)}
-    # prd: ${file(./environment/prd.yml)}
+# custom:
+#   environment:
+#     serverlessIfElse:
+# - If: '"${self:provider.stage}" == "dev"'
+#     Exclude:
+#       - plugins.serverless-offline
+# dev: ${file(./environment/dev.yml)}
+# prd: ${file(./environment/prd.yml)}
 
 provider:
   name: aws
@@ -29,8 +29,8 @@ provider:
   #         - usersTable
   #         - Arn
 
-plugins:
-  - serverless-offline
+# plugins:
+#   - serverless-offline
 
 package:
   patterns:
