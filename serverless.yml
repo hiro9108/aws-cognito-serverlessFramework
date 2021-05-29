@@ -2,10 +2,14 @@ service: cognito-demo
 
 frameworkVersion: "2"
 
-# custom:
-#   environment:
-#     dev: ${file(./environment/dev.yml)}
-#     prd: ${file(./environment/prd.yml)}
+custom:
+  environment:
+    serverlessIfElse:
+    - If: '"${self:provider.stage}" == "dev"'
+        Exclude:
+          - plugins.serverless-offline
+    # dev: ${file(./environment/dev.yml)}
+    # prd: ${file(./environment/prd.yml)}
 
 provider:
   name: aws
@@ -35,6 +39,7 @@ package:
     - "!public/**"
     - "!src/**"
     - "!.next/**"
+    - "!.github/**"
     - "!.github/**"
 
 functions:
