@@ -12,19 +12,21 @@ provider:
   runtime: nodejs12.x
   stage: ${opt:stage, 'dev'}
   region: ca-central-1
-  iamRoleStatements:
-    - Effect: "Allow"
-      Action:
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
-      Resource:
-        Fn::GetAtt:
-          - usersTable
-          - Arn
+  # iamRoleStatements:
+  #   - Effect: "Allow"
+  #     Action:
+  #       - dynamodb:Query
+  #       - dynamodb:Scan
+  #       - dynamodb:GetItem
+  #       - dynamodb:PutItem
+  #       - dynamodb:UpdateItem
+  #     Resource:
+  #       Fn::GetAtt:
+  #         - usersTable
+  #         - Arn
+
+plugins:
+  - serverless-offline
 
 package:
   patterns:
@@ -37,11 +39,12 @@ package:
 
 functions:
   first:
-    handler: api/firsthandler.first
+    handler: api/firstHandler.first
     events:
       - http:
           path: /hello
           method: GET
+          cors: true
           authorizer:
             type: COGNITO_USER_POOLS
             authorizerId: !Ref ApiGatewayAuthorizer
@@ -60,6 +63,54 @@ functions:
     handler: api/dynamodb.dynamodb
     events:
       - http: GET dynamodb
+
+  users:
+    handler: api/users.users
+    runtime: python3.8
+    events:
+      - http:
+          path: /users
+          method: GET
+          cors: true
+          # authorizer:
+          #   type: COGNITO_USER_POOLS
+          #   authorizerId: !Ref ApiGatewayAuthorizer
+
+  courses:
+    handler: api/courses.courses
+    runtime: python3.8
+    events:
+      - http:
+          path: /courses
+          method: GET
+          cors: true
+          # authorizer:
+          #   type: COGNITO_USER_POOLS
+          #   authorizerId: !Ref ApiGatewayAuthorizer
+
+  signup:
+    handler: api/signup_handler.signup
+    runtime: python3.8
+    events:
+      - http:
+          path: /signup
+          method: POST
+          cors: true
+          # authorizer:
+          #   type: COGNITO_USER_POOLS
+          #   authorizerId: !Ref ApiGatewayAuthorizer
+
+  mock:
+    handler: api/mock.mock
+    runtime: python3.8
+    events:
+      - http:
+          path: /mock
+          method: GET
+          cors: true
+          # authorizer:
+          #   type: COGNITO_USER_POOLS
+          #   authorizerId: !Ref ApiGatewayAuthorizer
 
 resources:
   - ${file(./resources/cognito.yml)}
