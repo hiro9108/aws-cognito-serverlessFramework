@@ -4,8 +4,12 @@ frameworkVersion: "2"
 
 # custom:
 #   environment:
-#     dev: ${file(./environment/dev.yml)}
-#     prd: ${file(./environment/prd.yml)}
+#     serverlessIfElse:
+# - If: '"${self:provider.stage}" == "dev"'
+#     Exclude:
+#       - plugins.serverless-offline
+# dev: ${file(./environment/dev.yml)}
+# prd: ${file(./environment/prd.yml)}
 
 provider:
   name: aws
@@ -25,8 +29,8 @@ provider:
   #         - usersTable
   #         - Arn
 
-plugins:
-  - serverless-offline
+# plugins:
+#   - serverless-offline
 
 package:
   patterns:
@@ -35,6 +39,7 @@ package:
     - "!public/**"
     - "!src/**"
     - "!.next/**"
+    - "!.github/**"
     - "!.github/**"
 
 functions:
