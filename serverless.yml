@@ -29,8 +29,8 @@ provider:
   #         - usersTable
   #         - Arn
 
-# plugins:
-#   - serverless-offline
+plugins:
+  - serverless-offline
 
 package:
   patterns:
@@ -111,6 +111,18 @@ functions:
     events:
       - http:
           path: /mock
+          method: GET
+          cors: true
+          # authorizer:
+          #   type: COGNITO_USER_POOLS
+          #   authorizerId: !Ref ApiGatewayAuthorizer
+
+  app:
+    handler: api/app.lambda_handler
+    runtime: python3.8
+    events:
+      - http:
+          path: /app
           method: GET
           cors: true
           # authorizer:
