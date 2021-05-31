@@ -13,7 +13,7 @@ frameworkVersion: "2"
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: python3.8
   stage: ${opt:stage, 'dev'}
   region: ca-central-1
   # iamRoleStatements:
@@ -43,35 +43,8 @@ package:
     - "!.github/**"
 
 functions:
-  first:
-    handler: api/firstHandler.first
-    events:
-      - http:
-          path: /hello
-          method: GET
-          cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId: !Ref ApiGatewayAuthorizer
-
-  second:
-    handler: api/secondHandler.second
-    events:
-      - http: GET second
-
-  email:
-    handler: api/email/emailHandler.email
-    events:
-      - http: GET email
-
-  dynamodb:
-    handler: api/dynamodb.dynamodb
-    events:
-      - http: GET dynamodb
-
   users:
     handler: api/users.users
-    runtime: python3.8
     events:
       - http:
           path: /users
@@ -83,7 +56,6 @@ functions:
 
   courses:
     handler: api/courses.courses
-    runtime: python3.8
     events:
       - http:
           path: /courses
@@ -95,7 +67,6 @@ functions:
 
   signup:
     handler: api/signup_handler.signup
-    runtime: python3.8
     events:
       - http:
           path: /signup
@@ -107,7 +78,6 @@ functions:
 
   mock:
     handler: api/mock.mock
-    runtime: python3.8
     events:
       - http:
           path: /mock
@@ -119,10 +89,20 @@ functions:
 
   app:
     handler: api/app.lambda_handler
-    runtime: python3.8
     events:
       - http:
           path: /app
+          method: GET
+          cors: true
+          # authorizer:
+          #   type: COGNITO_USER_POOLS
+          #   authorizerId: !Ref ApiGatewayAuthorizer
+
+  auth:
+    handler: api/auth.auth
+    events:
+      - http:
+          path: /auth
           method: GET
           cors: true
           # authorizer:
